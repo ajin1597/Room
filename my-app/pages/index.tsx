@@ -63,10 +63,12 @@ export default function Home() {
       : co2.roomNum == "421"
       ? co2Room421.push(co2)
       : null;
-
+    // console.log(co2Room413.length);
     if (co2Room413.length > 5) {
       co2Room413.splice(0, 1);
     }
+
+    console.log(co2Room413);
     // ##############여기서부터 하면됩니다. 5개씩 넘기세요
     // console.log(co2Room413.length);
 
