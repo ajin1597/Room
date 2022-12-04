@@ -1,6 +1,6 @@
 import Line from "../components/chart";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, MouseEventHandler } from "react";
 
 export default function Home() {
   const [apiCo2Data, setApiCo2Data] = useState<any>([]);
@@ -8,6 +8,10 @@ export default function Home() {
   const [apiLightData, setApiLightData] = useState<any>([]);
   const [apiPirData, setApiPirData] = useState<any>([]);
   const [apiTemperatureData, setApiTemperatureData] = useState<any>([]);
+  const roomNumer: any = ["413", "415", "417", "419", "421"];
+
+  // let clickRoomNum;
+  const [clickRoomNum, setclickRoomNum] = useState<any>("");
 
   function useInterval(callback: any, delay: any) {
     const savedCallback: any = useRef();
@@ -29,13 +33,17 @@ export default function Home() {
     }, [delay]);
   }
 
-  const a = () => {
+  const clickE = (e: MouseEventHandler<HTMLButtonElement>) => {
+    return () => {
+      setclickRoomNum(e);
+      // console.log(e);
+    };
+  };
+
+  const fetchSensorData = () => {
     fetch(`/api/sensor`)
       .then((res) => res.json())
       .then((json) => {
-        // console.log(json);
-        // console.log(json.co2Data);
-
         setApiCo2Data(json.co2Data);
         setApiHumidityData(json.humidityData);
         setApiLightData(json.lightData);
@@ -45,41 +53,9 @@ export default function Home() {
   };
 
   useInterval(() => {
-    a();
+    fetchSensorData();
+    clickE;
   }, 5000);
-  // useEffect(() => {
-  // a();
-  // setTimeout(a, 5000);
-  // fetch(`/api/sensor`)
-  //   .then((res) => res.json())
-  //   .then((json) => {
-  //     console.log(json);
-  //     console.log(json.co2Data);
-
-  //     setApiCo2Data(json.co2Data);
-  //     setApiHumidityData(json.humidityData);
-  //     setApiLightData(json.lightData);
-  //     setApiPirData(json.pitData);
-  //     setApiTemperatureData(json.temperatureData);
-  //   });
-  // }, []);
-
-  // console.log(apiCo2Data[0].roomNum == "415" ? "성공" : "실패");
-
-  // console.log(
-  //   apiCo2Data[0].roomNum == "417"
-  //     ? "성공"
-  //     : apiCo2Data[0].roomNum == "419"
-  //     ? "성공"
-  //     : apiCo2Data[0].roomNum == "421"
-  //     ? "성공"
-  //     : apiCo2Data[0].roomNum == "415"
-  //     ? "123313123213"
-  //     : "실패"
-  // );
-
-  // console.log(apiCo2Data[0].rommNum);
-  // console.log(417 ? apiCo2Data[0].roomNum : "null");
 
   let co2Room413: any = [];
   let co2Room415: any = [];
@@ -111,6 +87,8 @@ export default function Home() {
   let temRoom419: any = [];
   let temRoom421: any = [];
 
+  // 호수 별로 co2데이터를 넣음
+  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsCo2 = apiCo2Data.map((co2: any, idx: any) => {
     co2.roomNum == "413"
       ? co2Room413.push(co2)
@@ -151,6 +129,8 @@ export default function Home() {
     roomsCo2.splice(1);
   }
 
+  // 호수 별로 Humidity데이터를 넣음
+  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsHumidity = apiHumidityData.map((hu: any, idx: any) => {
     hu.roomNum == "413"
       ? huRoom413.push(hu)
@@ -191,6 +171,8 @@ export default function Home() {
     roomsHumidity.splice(1);
   }
 
+  // 호수 별로 Light데이터를 넣음
+  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsLight = apiLightData.map((light: any, idx: any) => {
     light.roomNum == "413"
       ? lightRoom413.push(light)
@@ -231,6 +213,8 @@ export default function Home() {
     roomsLight.splice(1);
   }
 
+  // 호수 별로 Pir데이터를 넣음
+  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsPir = apiPirData.map((pir: any, idx: any) => {
     pir.roomNum == "413"
       ? pirRoom413.push(pir)
@@ -271,6 +255,8 @@ export default function Home() {
     roomsPir.splice(1);
   }
 
+  // 호수 별로 Temperature데이터를 넣음
+  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsTemperature = apiTemperatureData.map((tem: any, idx: any) => {
     tem.roomNum == "413"
       ? temRoom413.push(tem)
@@ -310,18 +296,51 @@ export default function Home() {
   if (roomsTemperature.length > 1) {
     roomsTemperature.splice(1);
   }
-
-  console.log(roomsTemperature);
+  let allSensorData = {
+    roomsCo2,
+    roomsHumidity,
+    roomsLight,
+    roomsPir,
+    roomsTemperature,
+  };
+  // console.log(allSensorData);
 
   return (
     <div className="bg-red-200 flex justify-center  ">
       <div className="bg-blue-200 w-[800px] h-[800px] flex items-center">
-        {/* {co2.map((co2: string, index: number) => ( */}
-        {/* <Line data={temp}></Line> */}
-        {/* <Line data={temp}></Line> */}
-        {/* ))} */}
+        {clickRoomNum ? (
+          // (allSensorData == undefined) ?
+          <Line
+            // wait={6000}
+            data={allSensorData}
+            datasetsIdkey={clickRoomNum}
+          ></Line>
+        ) : (
+          <div>방선택ㄱㄱ</div>
+        )}
       </div>
-      <div className="bg-purple-200 w-[800px] h-[800px]"></div>
+      <div className="bg-purple-200 w-[800px] h-[800px]">
+        {roomNumer.map((room: any) => (
+          <button
+            className="flex flex-col items-center p-2 bg-gray-300 w-[100px] text-lg hover:bg-green-300"
+            onClick={clickE(room)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {room} 호
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
