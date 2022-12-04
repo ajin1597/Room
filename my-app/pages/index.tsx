@@ -1,6 +1,6 @@
 import Line from "../components/chart";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [apiCo2Data, setApiCo2Data] = useState<any>([]);
@@ -9,12 +9,32 @@ export default function Home() {
   const [apiPirData, setApiPirData] = useState<any>([]);
   const [apiTemperatureData, setApiTemperatureData] = useState<any>([]);
 
+  function useInterval(callback: any, delay: any) {
+    const savedCallback: any = useRef();
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
+
   const a = () => {
     fetch(`/api/sensor`)
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
-        console.log(json.co2Data);
+        // console.log(json);
+        // console.log(json.co2Data);
 
         setApiCo2Data(json.co2Data);
         setApiHumidityData(json.humidityData);
@@ -23,9 +43,26 @@ export default function Home() {
         setApiTemperatureData(json.temperatureData);
       });
   };
-  useEffect(() => {
+
+  useInterval(() => {
     a();
-  }, []);
+  }, 5000);
+  // useEffect(() => {
+  // a();
+  // setTimeout(a, 5000);
+  // fetch(`/api/sensor`)
+  //   .then((res) => res.json())
+  //   .then((json) => {
+  //     console.log(json);
+  //     console.log(json.co2Data);
+
+  //     setApiCo2Data(json.co2Data);
+  //     setApiHumidityData(json.humidityData);
+  //     setApiLightData(json.lightData);
+  //     setApiPirData(json.pitData);
+  //     setApiTemperatureData(json.temperatureData);
+  //   });
+  // }, []);
 
   // console.log(apiCo2Data[0].roomNum == "415" ? "성공" : "실패");
 
@@ -49,7 +86,6 @@ export default function Home() {
   let co2Room417: any = [];
   let co2Room419: any = [];
   let co2Room421: any = [];
-  let aaa: any = [];
 
   const roomsCo2 = apiCo2Data.map((co2: any, idx: any) => {
     co2.roomNum == "413"
@@ -67,33 +103,31 @@ export default function Home() {
     if (co2Room413.length > 5) {
       co2Room413.splice(0, 1);
     }
-
-    console.log(co2Room413);
-    // ##############여기서부터 하면됩니다. 5개씩 넘기세요
-    // console.log(co2Room413.length);
-
-    return co2Room413;
+    if (co2Room415.length > 5) {
+      co2Room415.splice(0, 1);
+    }
+    if (co2Room417.length > 5) {
+      co2Room417.splice(0, 1);
+    }
+    if (co2Room419.length > 5) {
+      co2Room419.splice(0, 1);
+    }
+    if (co2Room421.length > 5) {
+      co2Room421.splice(0, 1);
+    }
+    let allCo2Data = {
+      co2Room413,
+      co2Room415,
+      co2Room417,
+      co2Room419,
+      co2Room421,
+    };
+    return allCo2Data;
   });
+  if (roomsCo2.length > 1) {
+    roomsCo2.splice(1);
+  }
   console.log(roomsCo2);
-
-  // const temp = [room413, room415, room417, room419, room421];
-  // console.log(temp);
-
-  // const [members, setMembers] = useState<Array<string>>([]);
-
-  // const deleteMember = (index: number) => {
-  //   // member 삭제
-  //   const tmp = [...co2];
-  //   tmp.splice(index, 1);
-  //   console.log(Object.is(tmp, co2)); // false
-  //   setCo2(tmp); // rerendering o
-  // };
-  // const a = temp.map((temp: any, index: number) => `${temp} ${index}`);
-  // console.log(a);
-
-  // const apiData = () => {
-
-  // };
 
   return (
     <div className="bg-red-200 flex justify-center  ">
