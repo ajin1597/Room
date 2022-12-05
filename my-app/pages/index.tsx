@@ -1,4 +1,7 @@
-import Line from "../components/chart";
+import Line from "../components/chartCo2";
+import Line1 from "../components/chartHumidity";
+import Line2 from "../components/chartLight";
+import Line3 from "../components/chartTemperature";
 
 import { useEffect, useState, useRef, MouseEventHandler } from "react";
 
@@ -69,7 +72,7 @@ export default function Home() {
   useInterval(() => {
     fetchSensorData();
     clickE;
-  }, 5000);
+  }, 7000);
 
   let co2Room413: any = [];
   let co2Room415: any = [];
@@ -112,20 +115,6 @@ export default function Home() {
   let lightRoom448: any = [];
   let lightRoom452: any = [];
   let lightRoom454: any = [];
-
-  let pirRoom413: any = [];
-  let pirRoom415: any = [];
-  let pirRoom417: any = [];
-  let pirRoom419: any = [];
-  let pirRoom421: any = [];
-  let pirRoom422: any = [];
-  let pirRoom423: any = [];
-  let pirRoom424: any = [];
-  let pirRoom442: any = [];
-  let pirRoom446: any = [];
-  let pirRoom448: any = [];
-  let pirRoom452: any = [];
-  let pirRoom454: any = [];
 
   let temRoom413: any = [];
   let temRoom415: any = [];
@@ -413,97 +402,6 @@ export default function Home() {
     roomsLight.splice(1);
   }
 
-  // 호수 별로 Pir데이터를 넣음
-  // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
-  const roomsPir = apiPirData.map((pir: any, idx: any) => {
-    pir.roomNum == "413"
-      ? pirRoom413.push(pir)
-      : pir.roomNum == "415"
-      ? pirRoom415.push(pir)
-      : pir.roomNum == "417"
-      ? pirRoom417.push(pir)
-      : pir.roomNum == "419"
-      ? pirRoom419.push(pir)
-      : pir.roomNum == "421"
-      ? pirRoom421.push(pir)
-      : pir.roomNum == "422"
-      ? pirRoom422.push(pir)
-      : pir.roomNum == "423"
-      ? pirRoom423.push(pir)
-      : pir.roomNum == "424"
-      ? pirRoom424.push(pir)
-      : pir.roomNum == "442"
-      ? pirRoom442.push(pir)
-      : pir.roomNum == "446"
-      ? pirRoom446.push(pir)
-      : pir.roomNum == "448"
-      ? pirRoom448.push(pir)
-      : pir.roomNum == "452"
-      ? pirRoom452.push(pir)
-      : pir.roomNum == "454"
-      ? pirRoom454.push(pir)
-      : null;
-    if (pirRoom413.length > 5) {
-      pirRoom413.splice(0, 1);
-    }
-    if (pirRoom415.length > 5) {
-      pirRoom415.splice(0, 1);
-    }
-    if (pirRoom417.length > 5) {
-      pirRoom417.splice(0, 1);
-    }
-    if (pirRoom419.length > 5) {
-      pirRoom419.splice(0, 1);
-    }
-    if (pirRoom421.length > 5) {
-      pirRoom421.splice(0, 1);
-    }
-    if (pirRoom422.length > 5) {
-      pirRoom422.splice(0, 1);
-    }
-    if (pirRoom423.length > 5) {
-      pirRoom423.splice(0, 1);
-    }
-    if (pirRoom424.length > 5) {
-      pirRoom424.splice(0, 1);
-    }
-    if (pirRoom442.length > 5) {
-      pirRoom442.splice(0, 1);
-    }
-    if (pirRoom446.length > 5) {
-      pirRoom446.splice(0, 1);
-    }
-    if (pirRoom448.length > 5) {
-      pirRoom448.splice(0, 1);
-    }
-    if (pirRoom452.length > 5) {
-      pirRoom452.splice(0, 1);
-    }
-    if (pirRoom454.length > 5) {
-      pirRoom454.splice(0, 1);
-    }
-
-    let allPirData = {
-      pirRoom413,
-      pirRoom415,
-      pirRoom417,
-      pirRoom419,
-      pirRoom421,
-      pirRoom422,
-      pirRoom423,
-      pirRoom424,
-      pirRoom442,
-      pirRoom446,
-      pirRoom448,
-      pirRoom452,
-      pirRoom454,
-    };
-    return allPirData;
-  });
-  if (roomsPir.length > 1) {
-    roomsPir.splice(1);
-  }
-
   // 호수 별로 Temperature데이터를 넣음
   // 중첩삼항연산자를 사용하여 넣은 뒤 배열크기가 5이상이면 0번째 index를 삭제하여 배열생성
   const roomsTemperature = apiTemperatureData.map((tem: any, idx: any) => {
@@ -593,50 +491,78 @@ export default function Home() {
   if (roomsTemperature.length > 1) {
     roomsTemperature.splice(1);
   }
-  let allSensorData = {
-    roomsCo2,
-    roomsHumidity,
-    roomsLight,
-    roomsPir,
-    roomsTemperature,
-  };
+  // let allSensorData = {
+  //   roomsCo2,
+  //   roomsHumidity,
+  //   roomsLight,
+  //   roomsPir,
+  //   roomsTemperature,
+  // };
   // console.log(allSensorData);
 
   return (
-    <div className="bg-red-200 flex justify-center  ">
-      <div className="bg-blue-200 w-[800px] h-[800px] flex items-center">
-        {clickRoomNum ? (
-          // (allSensorData == undefined) ?
-          <Line
-            // wait={6000}
-            data={allSensorData}
-            datasetsIdkey={clickRoomNum}
-          ></Line>
-        ) : (
-          <div>방선택ㄱㄱ</div>
-        )}
+    <div className="bg-firstBgcolor flex justify-center w-[100vw] h-[100vh] p-5">
+      <div className=" bg-gray-300 w-[70%] ">
+        <div className="bg-blue-200 w-[100%] h-[50%] flex justify-between">
+          <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%] ">
+            {clickRoomNum ? (
+              <Line data={roomsCo2} datasetsIdkey={clickRoomNum}></Line>
+            ) : (
+              <div>방선택ㄱㄱ</div>
+            )}
+          </div>
+          <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%]">
+            {clickRoomNum ? (
+              <Line1 data={roomsHumidity} datasetsIdkey={clickRoomNum}></Line1>
+            ) : (
+              <div>방선택ㄱㄱ</div>
+            )}
+          </div>
+        </div>
+        <div className="bg-purple-200-200 w-[100%] h-[50%] flex justify-between">
+          <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%]">
+            {clickRoomNum ? (
+              <Line2 data={roomsLight} datasetsIdkey={clickRoomNum}></Line2>
+            ) : (
+              <div>방선택ㄱㄱ</div>
+            )}
+          </div>
+          <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%]">
+            {clickRoomNum ? (
+              <Line3
+                data={roomsTemperature}
+                datasetsIdkey={clickRoomNum}
+              ></Line3>
+            ) : (
+              <div>방선택ㄱㄱ</div>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="bg-purple-200 w-[800px] h-[800px]">
-        {roomNumer.map((room: any) => (
-          <button
-            className="flex flex-col items-center p-2 bg-gray-300 w-[100px] text-lg hover:bg-green-300"
-            onClick={clickE(room)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-6 h-6"
+      <div className="bg-secondBgcolor border-x-2 w-[30%] flex flex-col ">
+        <div className="bg-red-200 w-[100%] h-[50%] flex flex-wrap justify-center items-center">
+          {roomNumer.map((room: any) => (
+            <button
+              className="rounded-2xl flex flex-col justify-center items-center p-2 w-[13%] h-[15%] bg-gray-300 border m-5 text-lg hover:bg-green-300"
+              onClick={clickE(room)}
             >
-              <path
-                fill-rule="evenodd"
-                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            {room} 호
-          </button>
-        ))}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {room}호
+            </button>
+          ))}
+        </div>
+        <div>aaaaaaaaaaaaa</div>
       </div>
     </div>
   );
