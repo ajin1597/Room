@@ -491,14 +491,6 @@ export default function Home() {
   if (roomsTemperature.length > 1) {
     roomsTemperature.splice(1);
   }
-  // let allSensorData = {
-  //   roomsCo2,
-  //   roomsHumidity,
-  //   roomsLight,
-  //   roomsPir,
-  //   roomsTemperature,
-  // };
-  // console.log(allSensorData);
 
   return (
     <div className="bg-firstBgcolor flex justify-center w-[100vw] h-[100vh] p-5">
@@ -508,14 +500,14 @@ export default function Home() {
             {clickRoomNum ? (
               <Line data={roomsCo2} datasetsIdkey={clickRoomNum}></Line>
             ) : (
-              <div>방선택ㄱㄱ</div>
+              <div>방선택</div>
             )}
           </div>
           <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%]">
             {clickRoomNum ? (
               <Line1 data={roomsHumidity} datasetsIdkey={clickRoomNum}></Line1>
             ) : (
-              <div>방선택ㄱㄱ</div>
+              <div>방선택</div>
             )}
           </div>
         </div>
@@ -524,7 +516,7 @@ export default function Home() {
             {clickRoomNum ? (
               <Line2 data={roomsLight} datasetsIdkey={clickRoomNum}></Line2>
             ) : (
-              <div>방선택ㄱㄱ</div>
+              <div>방선택</div>
             )}
           </div>
           <div className="bg-thirdBgcolor flex items-center justify-center border w-[50%]">
@@ -534,7 +526,7 @@ export default function Home() {
                 datasetsIdkey={clickRoomNum}
               ></Line3>
             ) : (
-              <div>방선택ㄱㄱ</div>
+              <div>방선택</div>
             )}
           </div>
         </div>

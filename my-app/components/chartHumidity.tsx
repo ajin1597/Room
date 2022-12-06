@@ -37,7 +37,6 @@ export default function chartHumidity(props: any) {
       },
     ],
   });
-
   const configs: ChartOptions = {
     responsive: true,
     plugins: {
